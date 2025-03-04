@@ -1,0 +1,44 @@
+@font-face {
+    font-family: "Alegreya-Regular";
+    src: url("./assets/fonts/Alegreya-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Alegreya-Bold";
+    src: url("./assets/fonts/Alegreya-Bold.ttf");
+}
+
+:root {
+    --dark-bg-color: #181818;
+    --dark-fg-color: #e4e4ef;
+    --dark-wisteria-color: #9e95c7;
+}
+
+h1, h2, h3, h4, h5, h6, .text-bold {
+    font-family: "Alegreya-Bold", serif;
+}
+
+a {
+    color: var(--dark-wisteria-color);
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-large {
+    font-size: 3rem;
+}
+
+.text-medium{
+    font-size: 1.5rem;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--dark-bg-color);
+    color: var(--dark-fg-color);
+    font-family: "Alegreya-Regular", serif;
+    padding: 0.5rem;
+}
