@@ -23,12 +23,10 @@ async function load_train_network_data() {
 async function create_train_network_map(config) {
     const train_network_data = await load_train_network_data();
     
-    const svg = d3.select("body")
-                    .append("div")
-                        .attr("class", "train-network-map")
+    const svg = d3.select(".train-network-map")
                     .append("svg")
-                        .attr("width", config.width)
-                        .attr("height", config.height)
+                    .attr("width", config.width)
+                    .attr("height", config.height)
 
     const projection = d3.geoMercator()
                         .center(config.center)

@@ -22,6 +22,34 @@ a {
     color: var(--dark-wisteria-color);
 }
 
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--dark-bg-color);
+    color: var(--dark-fg-color);
+    font-family: "Alegreya-Regular", serif;
+    padding: 0.5rem;
+}
+
+.navigation-elements {
+    a {
+        margin-left: 1rem;
+        text-decoration: none;
+
+        &.active {
+            color: var(--dark-fg-color);
+            text-decoration: underline;
+        }
+    }
+}
+
 .text-center {
     text-align: center;
 }
@@ -34,30 +62,19 @@ a {
     font-size: 1.5rem;
 }
 
-body {
-    margin: 0;
-    padding: 0;
-    background-color: var(--dark-bg-color);
-    color: var(--dark-fg-color);
-    font-family: "Alegreya-Regular", serif;
-    padding: 0.5rem;
-}
-
 .train-network-map {
     display: flex;
     justify-content: center;
-}
+    .train-track {
+        fill: none;
+        stroke: var(--dark-fg-color);
+        stroke-width: 1;
+    }
 
-.train-track {
-    fill: none;
-    stroke: var(--dark-fg-color);
-    stroke-width: 1;
+    .train-track-name {
+        text-anchor: middle;
+        font-size: 10px;
+        fill: var(--dark-fg-color);
+        display: none;
+    }
 }
-
-.train-track-name {
-    text-anchor: middle;
-    font-size: 10px;
-    fill: var(--dark-fg-color);
-    display: none;
-}
-
