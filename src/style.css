@@ -43,15 +43,21 @@ body {
     padding: 0.5rem;
 }
 
+.train-network-map {
+    display: flex;
+    justify-content: center;
+}
+
 .train-track {
     fill: none;
     stroke: var(--dark-fg-color);
     stroke-width: 1;
 }
 
-.station-name {
+.train-track-name {
     text-anchor: middle;
     font-size: 10px;
     fill: var(--dark-fg-color);
+    display: none;
 }
 
