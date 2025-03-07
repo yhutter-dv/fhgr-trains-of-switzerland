@@ -42,3 +42,16 @@ body {
     font-family: "Alegreya-Regular", serif;
     padding: 0.5rem;
 }
+
+.train-track {
+    fill: none;
+    stroke: var(--dark-fg-color);
+    stroke-width: 1;
+}
+
+.station-name {
+    text-anchor: middle;
+    font-size: 10px;
+    fill: var(--dark-fg-color);
+}
+
