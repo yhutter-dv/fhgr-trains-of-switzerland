@@ -5,7 +5,7 @@ window.onload = () => main();
 
 async function main() {
     const train_network_config = {
-        width: 960,
+        width: 500,
         height: 500,
         center: [8.2275, 46.8182],
         scale: 7000

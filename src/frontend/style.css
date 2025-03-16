@@ -1,70 +1,76 @@
 @font-face {
-    font-family: "Alegreya-Regular";
-    src: url("./assets/fonts/Alegreya-Regular.ttf");
+    font-family: "JetBrainsMono-Regular";
+    src: url("./assets/fonts/JetBrainsMono-Regular.ttf");
 }
 
 @font-face {
-    font-family: "Alegreya-Bold";
-    src: url("./assets/fonts/Alegreya-Bold.ttf");
+    font-family: "JetBrainsMono-Bold";
+    src: url("./assets/fonts/JetBrainsMono-Bold.ttf");
 }
 
 :root {
-    --dark-bg-color: #181818;
-    --dark-fg-color: #e4e4ef;
-    --dark-wisteria-color: #9e95c7;
+    --dark-bg-color: #272822;
+    --dark-fg-color: #f8f8f2;
+    --dark-primary-color: #66d9ef;
 }
 
 h1, h2, h3, h4, h5, h6, .text-bold {
-    font-family: "Alegreya-Bold", serif;
+    font-family: "JetBrainsMono-Bold", serif;
 }
 
-a {
-    color: var(--dark-wisteria-color);
-}
-
-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.5rem;
-}
 
 body {
     margin: 0;
     padding: 0;
     background-color: var(--dark-bg-color);
     color: var(--dark-fg-color);
-    font-family: "Alegreya-Regular", serif;
+    font-family: "JetBrainsMono-Regular", serif;
     padding: 0.5rem;
 }
 
-.navigation-elements {
-    a {
-        margin-left: 1rem;
-        text-decoration: none;
+.dashboard-title {
+    font-size: 2rem;
+}
 
-        &.active {
-            color: var(--dark-fg-color);
-            text-decoration: underline;
+.dashboard-container {
+    display: grid;
+    height: 92vh;
+    gap: 0.5rem;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+    grid-template-areas:
+        "timeline graph"
+        "map graph";
+
+    .dashboard-widget {
+        padding: 0.5rem;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+
+        .title {
+            font-size: 1.2rem;
+            color: var(--dark-primary-color);
         }
+    }
+
+    .delay-timeline-widget {
+        grid-area: timeline;
+    }
+
+    .delay-graph-widget {
+        grid-area: graph;
+    }
+
+    .delay-map-widget {
+        grid-area: map;
     }
 }
 
-.text-center {
-    text-align: center;
-}
 
-.text-large {
-    font-size: 3rem;
-}
-
-.text-medium{
-    font-size: 1.5rem;
-}
 
 .train-network-map {
     display: flex;
     justify-content: center;
+    height: 50%;
     .train-track {
         fill: none;
         stroke: var(--dark-fg-color);

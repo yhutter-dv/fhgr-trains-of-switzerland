@@ -55,3 +55,7 @@ The following `Libraries` were used:
 - [d3js](https://d3js.org/)
 - [Vite](https://vite.dev/)
 
+## References
+During the development the following references were used:
+- [CSS Grid](https://css-tricks.com/snippets/css/complete-guide-grid/)
+
