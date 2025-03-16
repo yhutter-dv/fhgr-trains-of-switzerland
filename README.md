@@ -26,12 +26,12 @@ fastapi dev # Run the backend
 ### Jupyter Notebooks
 > :warning: Make sure you have your `virtual environment` activated and installed all relevant packages. If you have completed the steps above this is already the case.
 
-In the `jupyter_notebooks` directory (located inside `backend`) Jupyter Notebooks can be found. Those were mainly used to explore the data.
+The Jupyter Notebook is located inside `backend` directory. It was mainly used for exploring the dataset.
 
 ```bash
 cd src/backend # Navigate into the backend directory
 python3 -m ipykernel install --user --name=venv # Install the venv as an available kernel
-jupyter notebook jupyter_notebooks # Run the notebooks
+jupyter notebook # Run Jupyter Notebook
 ```
 
 ### Frontend
