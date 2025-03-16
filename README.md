@@ -20,7 +20,7 @@ cd src/backend # Navigate into the backend directory
 python3 -m venv ./venv # Create a virtual environment
 source ./venv/bin/activate.sh # Activate the virtual environment
 pip3 install -r ./requirements.txt # Install all required backages
-python3 main.py # Run the backend
+fastapi dev # Run the backend
 ```
 
 ### Jupyter Notebooks
