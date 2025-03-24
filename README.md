@@ -56,4 +56,5 @@ The following `Frameworks` were used:
 - [Svelte](https://svelte.dev/)
 - [Vite](https://vite.dev/)
 - [TailwindCSS](https://tailwindcss.com/)
+- [MapLibreGL JS](https://github.com/maplibre/maplibre-gl-js)
 
