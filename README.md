@@ -59,4 +59,5 @@ For the User Interface the following Ressources were used:
 The following `Frameworks` were used:
 - [Svelte](https://svelte.dev/)
 - [Vite](https://vite.dev/)
+- [TailwindCSS](https://tailwindcss.com/)
 
