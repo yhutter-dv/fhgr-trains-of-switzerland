@@ -51,10 +51,6 @@ During the development of the Visual Analytics Tool the following `data` was use
 - [SBB Line Graphical](https://data.sbb.ch/explore/dataset/linie-mit-polygon/information/)
 - [SBB Operation Points](https://data.sbb.ch/explore/dataset/linie-mit-betriebspunkten/information/)
 
-## UI
-For the User Interface the following Ressources were used:
-- [Rosé Pine Color Scheme](https://rosepinetheme.com/)
-
 ## Frameworks 
 The following `Frameworks` were used:
 - [Svelte](https://svelte.dev/)
