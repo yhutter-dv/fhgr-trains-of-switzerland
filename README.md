@@ -43,19 +43,20 @@ npm i # Install all relevant node packages
 npm run dev # Run the frontend
 ```
 
-
 ## Data
 During the development of the Visual Analytics Tool the following `data` was used:
+- [SBB Linie mit Betriebspunkten](https://data.sbb.ch/explore/dataset/linie-mit-betriebspunkten/table/)
 - [SBB Route Network](https://data.sbb.ch/explore/dataset/linie/export/)
 - [SBB Target/Actual Comparison departure/arrival times](https://data.sbb.ch/explore/dataset/ist-daten-sbb/information/)
+- [SBB Line Graphical](https://data.sbb.ch/explore/dataset/linie-mit-polygon/information/)
 - [SBB Operation Points](https://data.sbb.ch/explore/dataset/linie-mit-betriebspunkten/information/)
 
-## Libraries
-The following `Libraries` were used:
-- [d3js](https://d3js.org/)
-- [Vite](https://vite.dev/)
+## UI
+For the User Interface the following Ressources were used:
+- [Rosé Pine Color Scheme](https://rosepinetheme.com/)
 
-## References
-During the development the following references were used:
-- [CSS Grid](https://css-tricks.com/snippets/css/complete-guide-grid/)
+## Frameworks 
+The following `Frameworks` were used:
+- [Svelte](https://svelte.dev/)
+- [Vite](https://vite.dev/)
 

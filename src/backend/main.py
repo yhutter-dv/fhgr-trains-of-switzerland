@@ -7,7 +7,6 @@ app = FastAPI()
 def hello_world():
     return "Hello World"
 
-
 # Enable CORS: It is important that this is done AFTER defining the endpoints.
 app.add_middleware(
     CORSMiddleware,
