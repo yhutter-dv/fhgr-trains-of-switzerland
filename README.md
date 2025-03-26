@@ -9,6 +9,13 @@ Make sure you have an up to date version of `Python` and `NodeJs` installed. For
 ## Folder structure
 The Application is split into a `frontend` which does the visualization and `backend` which provides a `REST` API and does the data processing.
 
+## Preprocessing
+For preprocessing a script called `src/backend/preprocessing.py` was created which can be invoked from the command line:
+
+```bash
+python3 preprocessing.py --input-station-file data/sbb_stations.csv --input-data-dir data/arrival_departure_files/ --output-station-file data_cleaned/sbb_stations.csv --output-data-file data_cleaned/data_cleaned.csv
+```
+
 ## Running the Application
 > :warning: Make sure to start the `backend` before the `frontend`
 
@@ -31,7 +38,7 @@ The Jupyter Notebook is located inside `backend` directory. It was mainly used f
 ```bash
 cd src/backend # Navigate into the backend directory
 python3 -m ipykernel install --user --name=venv # Install the venv as an available kernel
-jupyter notebook # Run Jupyter Notebook
+jupyter notebook sbb_notebook.ipynb # Run Jupyter Notebook
 ```
 
 ### Frontend
@@ -45,11 +52,8 @@ npm run dev # Run the frontend
 
 ## Data
 During the development of the Visual Analytics Tool the following `data` was used:
-- [SBB Linie mit Betriebspunkten](https://data.sbb.ch/explore/dataset/linie-mit-betriebspunkten/table/)
-- [SBB Route Network](https://data.sbb.ch/explore/dataset/linie/export/)
-- [SBB Target/Actual Comparison departure/arrival times](https://data.sbb.ch/explore/dataset/ist-daten-sbb/information/)
-- [SBB Line Graphical](https://data.sbb.ch/explore/dataset/linie-mit-polygon/information/)
-- [SBB Operation Points](https://data.sbb.ch/explore/dataset/linie-mit-betriebspunkten/information/)
+- [SBB departure and arrival times](https://data.sbb.ch/explore/dataset/ist-daten-sbb/information/)
+- [SBB stations](https://data.sbb.ch/explore/dataset/linie-mit-betriebspunkten/information/)
 
 ## Frameworks 
 The following `Frameworks` were used:
