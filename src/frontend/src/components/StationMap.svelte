@@ -1,25 +1,72 @@
 <script>
     import { onMount } from "svelte";
-    import maplibregl, { Marker } from "maplibre-gl";
+    import maplibregl from "maplibre-gl";
+    import { HeatmapLayer, ScatterplotLayer } from "deck.gl";
+    import { MapboxOverlay } from "@deck.gl/mapbox";
     import "maplibre-gl/dist/maplibre-gl.css";
 
     const FAST_API_URL = import.meta.env.VITE_API_URL;
 
-    let stationMarkers = [];
+    let stations = [];
 
-    async function populateMarkersFromStations(map) {
-        console.log(FAST_API_URL);
+    async function loadStations() {
         const response = await fetch(`${FAST_API_URL}/stations`);
         const stations = await response.json();
-        for (let i = 0; i < stations.length; i++) {
-            const station = stations[i];
-            const longitude = station["longitude"];
-            const latitude = station["latitude"];
-            let marker = new Marker()
-                .setLngLat([longitude, latitude])
-                .addTo(map); // add the marker to the map
-            stationMarkers.push(marker);
-        }
+        return stations;
+    }
+
+    function addHeatmapLayerForStations(map, stations) {
+        // Implemented with reference to:
+        // - https://github.com/visgl/deck.gl/blob/9.1-release/examples/website/heatmap/app.tsx
+        // - https://maplibre.org/maplibre-gl-js/docs/examples/add-deckgl-layer-using-rest-api/
+        const radiusPixels = 30;
+        const intensity = 1.0;
+        const threshold = 0.03;
+        const heatmapLayer = new HeatmapLayer({
+            data: stations,
+            id: "stations-heatmap",
+            pickable: false,
+            getPosition: (d) => [d.longitude, d.latitude],
+            // TODO yhu: Use actual delay of station
+            getWeight: (d) => Math.random(),
+            radiusPixels,
+            intensity,
+            threshold,
+        });
+        const overlay = new MapboxOverlay({
+            layers: [heatmapLayer],
+        });
+        map.addControl(overlay);
+    }
+
+    function addScatterPlotLayerForStations(map, stations) {
+        const scatterPlotLayer = new ScatterplotLayer({
+            data: stations,
+            id: "stations-scatter",
+            pickable: true,
+            opacity: 0.7,
+            stroked: true,
+            filled: true,
+            radiusMinPixels: 14,
+            radiusMaxPixels: 100,
+            lineWidthMinPixels: 5,
+            getPosition: (d) => [d.longitude, d.latitude],
+            getFillColor: (d) => {
+                //TODO: Choose color depending on canton
+                return [0, 153, 102];
+            },
+
+            getLineColor: (d) => {
+                return [15, 23, 43];
+            },
+            onClick: (d) => {
+                console.log(d);
+            },
+        });
+        const overlay = new MapboxOverlay({
+            layers: [scatterPlotLayer],
+        });
+        map.addControl(overlay);
     }
 
     onMount(async () => {
@@ -29,7 +76,9 @@
             center: [7.4474, 46.9481],
             zoom: 12,
         });
-        await populateMarkersFromStations(map);
+        stations = await loadStations();
+        // addHeatmapLayerForStations(map, stations);
+        addScatterPlotLayerForStations(map, stations);
     });
 </script>
 
