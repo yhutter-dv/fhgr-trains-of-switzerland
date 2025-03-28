@@ -27,6 +27,9 @@ def preprocess_station_file(args):
         # Rename columns
         df_stations.rename(columns=interested_columns, inplace=True)
 
+        # Remove any duplicates
+        df_stations.drop_duplicates(subset=['opuic'], keep='first', inplace=True)
+
         # Create separate column for longitude and latitude from geopos
         df_stations[['latitude', 'longitude']] = df_stations['geopos'].str.split(',', expand=True)
 
@@ -37,9 +40,8 @@ def preprocess_station_file(args):
         # Remove geopos
         df_stations.drop('geopos', axis=1, inplace=True)
 
-
         # Save
-        df_stations.to_csv(args.output_station_file, index=False)
+        df_stations.to_csv(args.output_station_file, index=False, sep=";")
         print(f"Generated cleaned station file '{args.output_station_file}'")
     except Exception as e:
         print(f"ERROR: '{e}'")
@@ -66,15 +68,10 @@ def preprocess_input_data_to_df(csv_file_path):
     df_arrival_departure = pd.read_csv(csv_file_path, sep=";", usecols=interested_columns.keys())
     # Rename columns
     df_arrival_departure.rename(columns=interested_columns, inplace=True)
-    # Filter out entries with "NAN" or null values
-    df_arrival_departure = df_arrival_departure[df_arrival_departure["arrival_time"].notnull()]
-    df_arrival_departure = df_arrival_departure[df_arrival_departure["departure_time"].notnull()]
 
-    # Save actual time value in arrival and departure columns instead of something like '2025-03-02T11:28:00' -> '11:28:00'
-    df_arrival_departure['arrival_time'] = pd.to_datetime(df_arrival_departure['arrival_time']).dt.time
-    df_arrival_departure['arrival_forecast'] = pd.to_datetime(df_arrival_departure['arrival_forecast']).dt.time
-    df_arrival_departure['departure_time'] = pd.to_datetime(df_arrival_departure['departure_time']).dt.time
-    df_arrival_departure['departure_forecast'] = pd.to_datetime(df_arrival_departure['departure_forecast']).dt.time
+    # Convert to correct type
+    df_arrival_departure["arrival_time"] = pd.to_datetime(df_arrival_departure['arrival_time'])
+    df_arrival_departure["departure_time"] = pd.to_datetime(df_arrival_departure['departure_time'])
 
     return df_arrival_departure
 
@@ -103,15 +100,10 @@ def preprocess_input_data_dir(args):
                 print(f"ERROR: Failed to preprocess file '{csv_file_path}' because of '{e}', it will be skipped!")
                 continue
         # Save
-        df_complete.to_csv(args.output_data_file, index=False)
+        df_complete.to_csv(args.output_data_file, index=False, sep=";")
         print(f"Generated data file '{args.output_data_file}'")
     except Exception as e:
         print(f"ERROR: '{e}'")
-
-
-
-
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog='preprocessing')

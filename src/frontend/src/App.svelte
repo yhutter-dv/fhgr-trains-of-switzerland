@@ -7,9 +7,21 @@
 
 <Header></Header>
 <main class="grid p-2 gap-2 grid-flow-col grid-rows-4">
-    <TrainLinesTimeTable></TrainLinesTimeTable>
-    <StationMap></StationMap>
-    <TrainLinesGraph></TrainLinesGraph>
+    <!-- <div
+        class="row-span-2 bg-slate-950 p-4 rounded-md border border-slate-600 duration-300 ease-out hover:border-emerald-600"
+    >
+        <TrainLinesTimeTable></TrainLinesTimeTable>
+    </div> -->
+    <div
+        class="row-span-4 bg-slate-950 p-4 rounded-md border border-slate-600 duration-300 ease-out hover:border-emerald-600"
+    >
+        <StationMap></StationMap>
+    </div>
+    <!-- <div
+        class="row-span-4 bg-slate-950 p-4 rounded-md border border-slate-600 duration-300 ease-out hover:border-emerald-600"
+    >
+        <TrainLinesGraph></TrainLinesGraph>
+    </div> -->
 </main>
 
 <style>
