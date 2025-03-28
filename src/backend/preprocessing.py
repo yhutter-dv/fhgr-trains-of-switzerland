@@ -28,7 +28,7 @@ def preprocess_station_file(args):
         df_stations.rename(columns=interested_columns, inplace=True)
 
         # Create separate column for longitude and latitude from geopos
-        df_stations[['longitude', 'latitude']] = df_stations['geopos'].str.split(',', expand=True)
+        df_stations[['latitude', 'longitude']] = df_stations['geopos'].str.split(',', expand=True)
 
         # Convert to correct types
         df_stations['longitude'] = df_stations['longitude'].astype(float)

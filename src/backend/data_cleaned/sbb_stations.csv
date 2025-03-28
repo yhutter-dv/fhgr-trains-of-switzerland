@@ -1,4 +1,4 @@
-station_abbreviation,stop_name,km,opuic,longitude,latitude
+station_abbreviation,stop_name,km,opuic,latitude,longitude
 ABO,Aarburg-Oftringen,43.00505,8502000,47.320268469495055,7.908222606719322
 AHAU,Altishausen,29.09142,8506199,47.59648829967649,9.16237708933304
 ALG,Algetshausen-Henau,103.23323,8506220,47.44854834568097,9.109942187774752

@@ -1,15 +1,35 @@
 <script>
     import { onMount } from "svelte";
-    import maplibregl from "maplibre-gl";
+    import maplibregl, { Marker } from "maplibre-gl";
     import "maplibre-gl/dist/maplibre-gl.css";
 
-    onMount(() => {
+    const FAST_API_URL = import.meta.env.VITE_API_URL;
+
+    let stationMarkers = [];
+
+    async function populateMarkersFromStations(map) {
+        console.log(FAST_API_URL);
+        const response = await fetch(`${FAST_API_URL}/stations`);
+        const stations = await response.json();
+        for (let i = 0; i < stations.length; i++) {
+            const station = stations[i];
+            const longitude = station["longitude"];
+            const latitude = station["latitude"];
+            let marker = new Marker()
+                .setLngLat([longitude, latitude])
+                .addTo(map); // add the marker to the map
+            stationMarkers.push(marker);
+        }
+    }
+
+    onMount(async () => {
         const map = new maplibregl.Map({
             container: "map",
             style: "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
             center: [7.4474, 46.9481],
             zoom: 12,
         });
+        await populateMarkersFromStations(map);
     });
 </script>
 
