@@ -39,11 +39,15 @@ def get_arrival_delay_count(sample_interval):
     # Convert back into regular dataframe
     df_arrival_resampled.reset_index(inplace=True)
 
+    # Calculate nomralized value for count (between 0 and 1)
+    max_number_of_delays = df_arrival_resampled['arrival_delay_count'].max()
+    df_arrival_resampled['arrival_delay_count_normalized'] = df_arrival_resampled['arrival_delay_count'] / max_number_of_delays
+
     # Add information about station by joining on opuic such as longitude and latitude
     df_arrival_resampled = df_arrival_resampled.merge(df_stations[['opuic', 'stop_name', 'longitude', 'latitude']], on='opuic', how='left')
 
-    # Convert arrival time to utc seconds
-    df_arrival_resampled['arrival_time'] = df_arrival_resampled['arrival_time'].astype('int64')
+    # Add column for utc seconds
+    df_arrival_resampled['arrival_time_seconds'] = df_arrival_resampled['arrival_time'].astype('int64') / 1_000_000_000
 
     # Filter out any values that do not have a longitude and latitude
     df_arrival_resampled = df_arrival_resampled[(df_arrival_resampled["longitude"].notnull()) & (df_arrival_resampled["latitude"].notnull()) ]

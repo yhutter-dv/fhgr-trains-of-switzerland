@@ -11,6 +11,17 @@ const filterRangeBegin = new Date("2025-03-02T00:00:00Z").getTime() / 1000;
 const filterRangeEnd = new Date("2025-03-02T22:00:00Z").getTime() / 1000;
 let filterRange = [filterRangeBegin, filterRangeEnd];
 
+
+function getColorByPercentage(color1, color2, weight) {
+    // https://stackoverflow.com/questions/30143082/how-to-get-color-value-from-gradient-by-percentage-with-javascript
+    var w1 = weight;
+    var w2 = 1 - w1;
+    var rgb = [Math.round(color1[0] * w1 + color2[0] * w2),
+    Math.round(color1[1] * w1 + color2[1] * w2),
+    Math.round(color1[2] * w1 + color2[2] * w2)];
+    return rgb;
+}
+
 async function loadStations() {
     const response = await fetch(`${FAST_API_URL}/stations`);
     const stations = await response.json();
@@ -79,13 +90,13 @@ function createScatterPlotLayerForArrivalDelayStations(
     // - https://github.com/visgl/deck.gl/blob/9.1-release/examples/website/data-filter/app.tsx
     const dataFilter = new DataFilterExtension({
         filterSize: 1,
-        fp64: false,
+        fp64: true, // Enable 64bit Precision because we use Epoch TimeStamp
     });
     const scatterPlotLayer = new ScatterplotLayer({
         data: arrivalDelaysStations,
         id: "stations-scatter",
         pickable: true,
-        opacity: 0.7,
+        opacity: 1.0,
         stroked: true,
         filled: true,
         radiusMinPixels: 14,
@@ -93,9 +104,11 @@ function createScatterPlotLayerForArrivalDelayStations(
         lineWidthMinPixels: 5,
         getPosition: (d) => [d.longitude, d.latitude],
         getFillColor: (d) => {
-            //TODO: Add normalized value
-            //const red = d["arrival_delay_count"] * 30;
-            return [211, 134, 155];
+            const color1 = [255, 0, 0];
+            const color2 = [0, 255, 0];
+            const percentage = d["arrival_delay_count_normalized"];
+            const color = getColorByPercentage(color1, color2, percentage);
+            return color;
         },
 
         getLineColor: (d) => {
@@ -104,8 +117,9 @@ function createScatterPlotLayerForArrivalDelayStations(
         onClick: (d) => {
             console.log(d);
         },
-        getFilterValue: (d) => d["arrival_time"],
+        getFilterValue: (d) => d["arrival_time_seconds"],
         filterRange,
+        extensions: [dataFilter]
     });
     return scatterPlotLayer;
 }
@@ -125,10 +139,12 @@ window.addEventListener("load", (async () => {
     const scatterLayerStations =
         createScatterPlotLayerForStations(stations);
 
-    let filterRangeBegin =
-        new Date("2025-03-02T00:00:00Z").getTime() / 1000;
-    let filterRangeEnd = new Date("2025-03-02T22:00:00Z").getTime() / 1000;
-    const filterRange = [filterRangeBegin, filterRangeEnd];
+    const startDate = new Date("2025-03-02T08:00:00Z")
+    const endDate = new Date("2025-03-02T22:00:00Z")
+
+    let filterRangeBegin = startDate.getTime() / 1000;
+    const filterRangeEnd = endDate.getTime() / 1000;
+    let filterRange = [filterRangeBegin, filterRangeEnd];
     const scatterLayerArrivalDelaysStations =
         createScatterPlotLayerForArrivalDelayStations(
             arrivalDelaysForStations,
@@ -140,15 +156,15 @@ window.addEventListener("load", (async () => {
     map.addControl(overlay);
 
     const advanceTimeButton = document.getElementById(
-        "advance-time-button",
+        "advance-time-button"
     );
 
     advanceTimeButton.addEventListener("click", () => {
-        console.log("Button clicked");
+        startDate.setHours(startDate.getHours() + 1)
         filterRangeBegin =
-            new Date("2025-03-02T13:00:00Z").getTime() / 1000;
-        filterRangeEnd = new Date("2025-03-02T14:00:00Z").getTime() / 1000;
-        const filterRange = [filterRangeBegin, filterRangeEnd];
+            startDate.getTime() / 1000;
+        filterRange[0] = filterRangeBegin;
+        console.log(filterRange)
         const scatterLayerArrivalDelaysStations =
             createScatterPlotLayerForArrivalDelayStations(
                 arrivalDelaysForStations,
