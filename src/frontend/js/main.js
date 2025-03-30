@@ -92,6 +92,9 @@ function createScatterPlotLayerForArrivalDelayStations(
         filterSize: 1,
         fp64: true, // Enable 64bit Precision because we use Epoch TimeStamp
     });
+    const min = filterRange[0]
+    const max = filterRange[1]
+    const span = max - min
     const scatterPlotLayer = new ScatterplotLayer({
         data: arrivalDelaysStations,
         id: "stations-scatter",
@@ -118,10 +121,36 @@ function createScatterPlotLayerForArrivalDelayStations(
             console.log(d);
         },
         getFilterValue: (d) => d["arrival_time_seconds"],
-        filterRange,
+        filterSoftRange: [min + span * 0.8, min + span],
+        filterRange: [min, max],
         extensions: [dataFilter]
     });
     return scatterPlotLayer;
+}
+
+function createHeatmapLayerForArrivalDelayStations(arrivalDelaysStation, filterRange) {
+    const dataFilter = new DataFilterExtension({
+        filterSize: 1,
+        fp64: true, // Enable 64bit Precision because we use Epoch TimeStamp
+    });
+    const radiusPixels = 30;
+    const intensity = 1.0;
+    const threshold = 0.03;
+    const heatmapLayer = new HeatmapLayer({
+        data: arrivalDelaysStation,
+        id: "stations-heatmap",
+        pickable: false,
+        getPosition: (d) => [d.longitude, d.latitude],
+        getWeight: (d) => d["arrival_delay_count_normalized"],
+        radiusPixels,
+        intensity,
+        threshold,
+        getFilterValue: (d) => d["arrival_time_seconds"],
+        filterRange,
+        // TODO: Figure out why the data filter extension does not work on a heatmap.
+        extensions: [dataFilter]
+    });
+    return heatmapLayer;
 }
 
 
@@ -135,23 +164,20 @@ window.addEventListener("load", (async () => {
     stations = await loadStations();
     const arrivalDelaysForStations = await loadArrivalDelaysForStations();
 
-    const heatmapLayer = createHeatmapLayerForStations(stations);
-    const scatterLayerStations =
-        createScatterPlotLayerForStations(stations);
-
-    const startDate = new Date("2025-03-02T08:00:00Z")
+    const startDate = new Date("2025-03-02T00:00:00Z")
     const endDate = new Date("2025-03-02T22:00:00Z")
 
     let filterRangeBegin = startDate.getTime() / 1000;
     const filterRangeEnd = endDate.getTime() / 1000;
     let filterRange = [filterRangeBegin, filterRangeEnd];
-    const scatterLayerArrivalDelaysStations =
-        createScatterPlotLayerForArrivalDelayStations(
-            arrivalDelaysForStations,
-            filterRange,
-        );
+
+    //const layer = createHeatmapLayerForStations(stations);
+    //const layer = createScatterPlotLayerForStations(stations);
+    const layer = createScatterPlotLayerForArrivalDelayStations(arrivalDelaysForStations, filterRange);
+    //const layer = createHeatmapLayerForArrivalDelayStations(arrivalDelaysForStations, filterRange)
+
     let overlay = new MapboxOverlay({
-        layers: [scatterLayerArrivalDelaysStations],
+        layers: [layer],
     });
     map.addControl(overlay);
 
@@ -160,18 +186,12 @@ window.addEventListener("load", (async () => {
     );
 
     advanceTimeButton.addEventListener("click", () => {
+        // Advance by 1 hour
         startDate.setHours(startDate.getHours() + 1)
-        filterRangeBegin =
-            startDate.getTime() / 1000;
+        filterRangeBegin = startDate.getTime() / 1000;
         filterRange[0] = filterRangeBegin;
-        console.log(filterRange)
-        const scatterLayerArrivalDelaysStations =
-            createScatterPlotLayerForArrivalDelayStations(
-                arrivalDelaysForStations,
-                filterRange,
-            );
-        overlay.setProps({
-            layers: [scatterLayerArrivalDelaysStations],
-        });
+        //const layer = createHeatmapLayerForArrivalDelayStations(arrivalDelaysForStations, filterRange);
+        const layer = createScatterPlotLayerForArrivalDelayStations(arrivalDelaysForStations, filterRange);
+        overlay.setProps({ layers: [layer] });
     });
 }));
