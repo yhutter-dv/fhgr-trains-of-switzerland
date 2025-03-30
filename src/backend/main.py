@@ -42,9 +42,9 @@ def get_arrival_delay_count(sample_interval):
     # Add information about station by joining on opuic such as longitude and latitude
     df_arrival_resampled = df_arrival_resampled.merge(df_stations[['opuic', 'stop_name', 'longitude', 'latitude']], on='opuic', how='left')
 
-    # Convert arrival time to UTC String in order to be able to send it as JSON
-    df_arrival_resampled['arrival_time'] = df_arrival_resampled['arrival_time'].dt.strftime('%Y-%m-%dT%H:%M:%SZ')
-    #
+    # Convert arrival time to utc seconds
+    df_arrival_resampled['arrival_time'] = df_arrival_resampled['arrival_time'].astype('int64')
+
     # Filter out any values that do not have a longitude and latitude
     df_arrival_resampled = df_arrival_resampled[(df_arrival_resampled["longitude"].notnull()) & (df_arrival_resampled["latitude"].notnull()) ]
 

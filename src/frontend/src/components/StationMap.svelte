@@ -3,11 +3,15 @@
     import maplibregl from "maplibre-gl";
     import { HeatmapLayer, ScatterplotLayer } from "deck.gl";
     import { MapboxOverlay } from "@deck.gl/mapbox";
+    import { DataFilterExtension } from "@deck.gl/extensions";
     import "maplibre-gl/dist/maplibre-gl.css";
 
     const FAST_API_URL = import.meta.env.VITE_API_URL;
 
     let stations = [];
+    const filterRangeBegin = new Date("2025-03-02T00:00:00Z").getTime() / 1000;
+    const filterRangeEnd = new Date("2025-03-02T22:00:00Z").getTime() / 1000;
+    let filterRange = [filterRangeBegin, filterRangeEnd];
 
     async function loadStations() {
         const response = await fetch(`${FAST_API_URL}/stations`);
@@ -15,7 +19,13 @@
         return stations;
     }
 
-    function addHeatmapLayerForStations(map, stations) {
+    async function loadArrivalDelaysForStations() {
+        const response = await fetch(`${FAST_API_URL}/stations/arrival_delays`);
+        const arrivalDelaysForStations = await response.json();
+        return arrivalDelaysForStations;
+    }
+
+    function createHeatmapLayerForStations(stations) {
         // Implemented with reference to:
         // - https://github.com/visgl/deck.gl/blob/9.1-release/examples/website/heatmap/app.tsx
         // - https://maplibre.org/maplibre-gl-js/docs/examples/add-deckgl-layer-using-rest-api/
@@ -33,13 +43,10 @@
             intensity,
             threshold,
         });
-        const overlay = new MapboxOverlay({
-            layers: [heatmapLayer],
-        });
-        map.addControl(overlay);
+        return heatmapLayer;
     }
 
-    function addScatterPlotLayerForStations(map, stations) {
+    function createScatterPlotLayerForStations(stations) {
         const scatterPlotLayer = new ScatterplotLayer({
             data: stations,
             id: "stations-scatter",
@@ -63,10 +70,46 @@
                 console.log(d);
             },
         });
-        const overlay = new MapboxOverlay({
-            layers: [scatterPlotLayer],
+        return scatterPlotLayer;
+    }
+
+    function createScatterPlotLayerForArrivalDelayStations(
+        arrivalDelaysStations,
+        filterRange,
+    ) {
+        // Implemented with reference to:
+        // - https://github.com/visgl/deck.gl/blob/9.1-release/examples/website/data-filter/app.tsx
+        const dataFilter = new DataFilterExtension({
+            filterSize: 1,
+            fp64: false,
         });
-        map.addControl(overlay);
+        const scatterPlotLayer = new ScatterplotLayer({
+            data: arrivalDelaysStations,
+            id: "stations-scatter",
+            pickable: true,
+            opacity: 0.7,
+            stroked: true,
+            filled: true,
+            radiusMinPixels: 14,
+            radiusMaxPixels: 100,
+            lineWidthMinPixels: 5,
+            getPosition: (d) => [d.longitude, d.latitude],
+            getFillColor: (d) => {
+                //TODO: Add normalized value
+                const red = d["arrival_delay_count"] * 30;
+                return [red, 153, 102];
+            },
+
+            getLineColor: (d) => {
+                return [15, 23, 43];
+            },
+            onClick: (d) => {
+                console.log(d);
+            },
+            getFilterValue: (d) => d["arrival_time"],
+            filterRange,
+        });
+        return scatterPlotLayer;
     }
 
     onMount(async () => {
@@ -77,8 +120,45 @@
             zoom: 12,
         });
         stations = await loadStations();
-        // addHeatmapLayerForStations(map, stations);
-        addScatterPlotLayerForStations(map, stations);
+        const arrivalDelaysForStations = await loadArrivalDelaysForStations();
+
+        const heatmapLayer = createHeatmapLayerForStations(stations);
+        const scatterLayerStations =
+            createScatterPlotLayerForStations(stations);
+
+        let filterRangeBegin =
+            new Date("2025-03-02T00:00:00Z").getTime() / 1000;
+        let filterRangeEnd = new Date("2025-03-02T22:00:00Z").getTime() / 1000;
+        const filterRange = [filterRangeBegin, filterRangeEnd];
+        const scatterLayerArrivalDelaysStations =
+            createScatterPlotLayerForArrivalDelayStations(
+                arrivalDelaysForStations,
+                filterRange,
+            );
+        let overlay = new MapboxOverlay({
+            layers: [scatterLayerArrivalDelaysStations],
+        });
+        map.addControl(overlay);
+
+        const advanceTimeButton = document.getElementById(
+            "advance-time-button",
+        );
+
+        advanceTimeButton.addEventListener("click", () => {
+            console.log("Button clicked");
+            filterRangeBegin =
+                new Date("2025-03-02T13:00:00Z").getTime() / 1000;
+            filterRangeEnd = new Date("2025-03-02T14:00:00Z").getTime() / 1000;
+            const filterRange = [filterRangeBegin, filterRangeEnd];
+            const scatterLayerArrivalDelaysStations =
+                createScatterPlotLayerForArrivalDelayStations(
+                    arrivalDelaysForStations,
+                    filterRange,
+                );
+            overlay.setProps({
+                layers: [scatterLayerArrivalDelaysStations],
+            });
+        });
     });
 </script>
 
@@ -103,6 +183,11 @@
     </div>
 </div>
 <div id="map" class="h-[80%] w-[100%] my-4 rounded-lg"></div>
+
+<button
+    class="text-emerald-500 border border-emerald-500 p-2 rounded-md"
+    id="advance-time-button">Advance Time</button
+>
 
 <style>
 </style>
