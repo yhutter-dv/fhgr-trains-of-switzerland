@@ -58,6 +58,5 @@ During the development of the Visual Analytics Tool the following `data` was use
 ## Frameworks 
 The following `Frameworks` were used:
 - [Vite](https://vite.dev/)
-- [TailwindCSS](https://tailwindcss.com/)
 - [MapLibreGL JS](https://github.com/maplibre/maplibre-gl-js)
 

@@ -1,17 +1,99 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
 :root {
-    --header-height: 5rem;
-}
-
-main {
-    height: calc(100vh - var(--header-height));
-}
-
-@theme {
+    --header-height: 3rem;
     --color-nord-light-bg: #f2f4f8;
     --color-nord-light-white: #ffffff;
     --color-nord-light-fg: #4e5668;
     --color-nord-light-primary: #2e3440;
     --color-nord-light-gray: #edeff3;
 }
+
+body {
+    margin: 0;
+    padding: 0;
+    color: var(--color-nord-light-fg);
+    font-family: "Roboto", sans-serif;
+}
+
+p {
+    margin: 0;
+}
+
+main {
+    height: calc(100vh - var(--header-height));
+}
+
+header {
+    height: var(--header-height);
+    background-color: var(--color-nord-light-gray);
+    box-shadow: rgba(216, 222, 233, 0.15) 0px 5px 10px 0px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+    gap: 0.5rem;
+    padding: 0.5rem;
+
+    .header-logo {
+        width: 2rem;
+        height: 2rem;
+        stroke: var(--color-nord-light-primary);
+        stroke-width: 1.5px;
+    }
+
+    .header-text {
+        font-weight: bold;
+        font-size: 1.5rem;
+    }
+}
+
+.dashboard {
+    background-color: var(--color-nord-light-gray);
+    gap: 1rem;
+    padding: 0 1rem;
+
+    .dashboard-widget {
+        background-color: var(--color-nord-light-white);
+        display: flex;
+        flex-direction: column;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        box-shadow: rgba(184, 194, 215, 0.25) 0px 4px 6px 0px;
+
+        .dashboard-widget-header {
+            display: flex;
+            flex-direction: row;
+            align-items: start;
+            justify-content: space-between;
+
+            .dashboard-widget-header-title {
+                font-weight: 500;
+                font-size: 1.2rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .dashboard-widget-header-subtitle {
+                margin-bottom: 0.5rem;
+            }
+
+        }
+
+        .dashboard-widget-reload {
+            width: 1.5rem;
+            height: 1.5rem;
+            stroke: var(--color-nord-light-primary);
+            stroke-width: 1.5px;
+
+        }
+
+    }
+
+    .station-map {
+        margin: 1rem 0;
+        border-radius: 0.5rem;
+        height: 640px;
+    }
+
+}
+

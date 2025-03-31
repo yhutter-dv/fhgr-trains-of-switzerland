@@ -184,14 +184,17 @@ window.addEventListener("load", (async () => {
     });
     map.addControl(overlay);
 
-    const advanceTimeButton = document.getElementById(
-        "advance-time-button"
-    );
+    const mapRangeSlider = document.getElementById("station-map-range-slider");
+    mapRangeSlider.min = filterRangeBegin;
+    mapRangeSlider.max = filterRangeEnd;
+    mapRangeSlider.step = 3600
 
-    advanceTimeButton.addEventListener("click", () => {
+    mapRangeSlider.addEventListener("input", () => {
         // Advance by 1 hour
-        startDate.setHours(startDate.getHours() + 1)
-        filterRangeBegin = startDate.getTime() / 1000;
+        const epochSeconds = mapRangeSlider.value
+        const newStartDate = new Date(0)
+        newStartDate.setUTCSeconds(epochSeconds)
+        filterRangeBegin = newStartDate.getTime() / 1000;
         filterRange[0] = filterRangeBegin;
         //const layer = createHeatmapLayerForArrivalDelayStations(arrivalDelaysForStations, filterRange);
         const layer = createScatterPlotLayerForArrivalDelayStations(arrivalDelaysForStations, filterRange);
