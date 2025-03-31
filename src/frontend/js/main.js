@@ -11,6 +11,10 @@ const filterRangeBegin = new Date("2025-03-02T00:00:00Z").getTime() / 1000;
 const filterRangeEnd = new Date("2025-03-02T22:00:00Z").getTime() / 1000;
 let filterRange = [filterRangeBegin, filterRangeEnd];
 
+const mapBaseStyle = "https://vectortiles.geo.admin.ch/styles/ch.swisstopo.leichte-basiskarte.vt/style.json";
+const markerStrokeColor = [46, 52, 64];
+const markerOkColor = [163, 190, 140];
+const markerErrorColor = [191, 97, 106];
 
 function getColorByPercentage(color1, color2, weight) {
     // https://stackoverflow.com/questions/30143082/how-to-get-color-value-from-gradient-by-percentage-with-javascript
@@ -68,12 +72,11 @@ function createScatterPlotLayerForStations(stations) {
         lineWidthMinPixels: 5,
         getPosition: (d) => [d.longitude, d.latitude],
         getFillColor: (d) => {
-            //TODO: Choose color depending on number of delays 
-            return [211, 134, 155];
+            return markerOkColor;
         },
 
         getLineColor: (d) => {
-            return [29, 32, 33];
+            return markerStrokeColor;
         },
         onClick: (d) => {
             console.log(d);
@@ -107,15 +110,15 @@ function createScatterPlotLayerForArrivalDelayStations(
         lineWidthMinPixels: 5,
         getPosition: (d) => [d.longitude, d.latitude],
         getFillColor: (d) => {
-            const color1 = [255, 0, 0];
-            const color2 = [0, 255, 0];
+            const color1 = markerErrorColor;
+            const color2 = markerOkColor;
             const percentage = d["arrival_delay_count_normalized"];
             const color = getColorByPercentage(color1, color2, percentage);
             return color;
         },
 
         getLineColor: (d) => {
-            return [29, 32, 33];
+            return markerStrokeColor;
         },
         onClick: (d) => {
             console.log(d);
@@ -157,7 +160,7 @@ function createHeatmapLayerForArrivalDelayStations(arrivalDelaysStation, filterR
 window.addEventListener("load", (async () => {
     const map = new maplibregl.Map({
         container: "map",
-        style: "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
+        style: mapBaseStyle,
         center: [7.4474, 46.9481],
         zoom: 12,
     });

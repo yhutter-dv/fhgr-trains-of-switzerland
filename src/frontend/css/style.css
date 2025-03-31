@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-    --header-height: 4rem;
+    --header-height: 5rem;
 }
 
 main {
@@ -9,9 +9,9 @@ main {
 }
 
 @theme {
-    --color-gruvbox-dark-bg: #1d2021;
-    --color-gruvbox-dark-bg-1: #3c3836;
-    --color-gruvbox-dark-fg: #ebdbb2;
-    --color-gruvbox-dark-primary: #d3869b;
-    --color-gruvbox-dark-gray: #928374;
+    --color-nord-light-bg: #f2f4f8;
+    --color-nord-light-white: #ffffff;
+    --color-nord-light-fg: #4e5668;
+    --color-nord-light-primary: #2e3440;
+    --color-nord-light-gray: #edeff3;
 }
