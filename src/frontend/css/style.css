@@ -7,6 +7,7 @@
     --color-nord-light-fg: #4e5668;
     --color-nord-light-primary: #2e3440;
     --color-nord-light-gray: #edeff3;
+    --color-nord-light-blue: #88c0d0;
 }
 
 body {
@@ -18,10 +19,6 @@ body {
 
 p {
     margin: 0;
-}
-
-main {
-    height: calc(100vh - var(--header-height));
 }
 
 header {
@@ -46,6 +43,11 @@ header {
         font-weight: bold;
         font-size: 1.5rem;
     }
+}
+
+main {
+    height: calc(100vh - var(--header-height));
+
 }
 
 .dashboard {
@@ -84,9 +86,7 @@ header {
             height: 1.5rem;
             stroke: var(--color-nord-light-primary);
             stroke-width: 1.5px;
-
         }
-
     }
 
     .station-map {
@@ -94,6 +94,44 @@ header {
         border-radius: 0.5rem;
         height: 640px;
     }
+    .station-map-range-slider-container {
+        margin: 0.5rem 0;
+        /*CSS Styling for range input: https://www.smashingmagazine.com/2021/12/create-custom-range-input-consistent-browsers/*/
+        input[type="range"] { 
+          -webkit-appearance: none;
+          appearance: none;
+          background: transparent;
+          cursor: pointer;
+          width: 100%;
+        }
 
+        input[type="range"]::-webkit-slider-runnable-track {
+          background: var(--color-nord-light-primary);
+          height: 0.25rem;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+           -webkit-appearance: none; /* Override default look */
+           appearance: none;
+           margin-top: -0.375rem; /* Centers thumb on the track */
+           background-color: var(--color-nord-light-blue);
+           border-radius: 100%;
+           border: 4px solid var(--color-nord-light-primary);
+           height: 1rem;
+           width: 1rem;    
+           anchor-name: --thumb;
+        }
+
+        #station-map-range-slider-tooltip {
+            position-anchor: --thumb;
+            position: absolute;
+            position-area: top;
+            padding: 0.5rem;
+            background-color: var(--color-nord-light-gray);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            box-shadow: rgba(184, 194, 215, 0.25) 0px 4px 6px 0px;
+        }
+    }
 }
 

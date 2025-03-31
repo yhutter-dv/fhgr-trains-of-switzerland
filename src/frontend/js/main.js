@@ -167,8 +167,8 @@ window.addEventListener("load", (async () => {
     stations = await loadStations();
     const arrivalDelaysForStations = await loadArrivalDelaysForStations();
 
-    const startDate = new Date("2025-03-02T00:00:00Z")
-    const endDate = new Date("2025-03-02T22:00:00Z")
+    let startDate = new Date("2025-03-02T00:00:00Z")
+    const endDate = new Date("2025-03-02T23:00:00Z")
 
     let filterRangeBegin = startDate.getTime() / 1000;
     const filterRangeEnd = endDate.getTime() / 1000;
@@ -187,15 +187,22 @@ window.addEventListener("load", (async () => {
     const mapRangeSlider = document.getElementById("station-map-range-slider");
     mapRangeSlider.min = filterRangeBegin;
     mapRangeSlider.max = filterRangeEnd;
-    mapRangeSlider.step = 3600
+    mapRangeSlider.step = 60 // seconds
+
+    const mapRangeSliderTooltip = document.getElementById("station-map-range-slider-tooltip")
+    mapRangeSliderTooltip.innerHTML = `${startDate.toLocaleString()}`
 
     mapRangeSlider.addEventListener("input", () => {
-        // Advance by 1 hour
         const epochSeconds = mapRangeSlider.value
-        const newStartDate = new Date(0)
-        newStartDate.setUTCSeconds(epochSeconds)
-        filterRangeBegin = newStartDate.getTime() / 1000;
+        startDate = new Date(0)
+        startDate.setUTCSeconds(epochSeconds)
+
+        // Update Filter Range
+        filterRangeBegin = startDate.getTime() / 1000;
         filterRange[0] = filterRangeBegin;
+
+        // Update Range Slider Tooltip
+        mapRangeSliderTooltip.innerHTML = `${startDate.toLocaleString()}`
         //const layer = createHeatmapLayerForArrivalDelayStations(arrivalDelaysForStations, filterRange);
         const layer = createScatterPlotLayerForArrivalDelayStations(arrivalDelaysForStations, filterRange);
         overlay.setProps({ layers: [layer] });
